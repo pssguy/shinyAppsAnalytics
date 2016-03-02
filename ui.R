@@ -11,7 +11,7 @@ inputPanel(
     actionButton("go","Get Data")
     
 ),
-    
+    uiOutput("appSelect"),
     
     
     
@@ -57,7 +57,8 @@ inputPanel(
 
             
 tabItem("analysis",
-        DT::dataTableOutput("appsTable"))
+        DT::dataTableOutput("appsTable"),
+        plotlyOutput("appChart"))
         
 #tabItem("info",includeMarkdown("about.md"))     
             

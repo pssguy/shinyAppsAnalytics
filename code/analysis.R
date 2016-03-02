@@ -13,14 +13,20 @@ data <- eventReactive (input$go,{
   
   print(glimpse(apps))
   
-  info=list(apps=apps)
+  choices <- sort(apps$name)
+  
+  info=list(apps=apps,choices=choices)
   return(info)
   
 })
 
-# output$appSelect <- uiOutput({
-#   
-# })
+output$appSelect <- renderUI({
+  
+  
+  inputPanel(
+    selectInput("app", label="Select App",selected="premierLeague", data()$choices),
+    actionButton("getChart","Get Chart"))
+})
 
 output$appsTable <- DT::renderDataTable({
  
@@ -29,4 +35,44 @@ data()$apps %>%
     select(name,status,created,updated) %>% 
      arrange(status) %>% 
   DT::datatable(class='compact stripe hover row-border order-column',rownames=FALSE,options= list(paging = TRUE, searching = TRUE,info=FALSE))
+})
+
+
+
+appData <- eventReactive (input$getChart,{
+  
+  req(input$app)
+  req(input$account)
+  appInfo <- showUsage(appDir = getwd(), appName = input$app, account = input$account,
+                                server = NULL, usageType = "hours", from = NULL, until = NULL,
+                                interval = NULL)
+  
+  
+  
+  appInfo$time <- as.POSIXct(appInfo$timestamp, origin="1970-01-01")
+  
+#  sort(appInfo$time) #146 readings 73x2
+  
+  appInfo <-appInfo %>% 
+    arrange(time) %>% 
+    filter(hours!=0.00)
+  
+ 
+  
+  appInfo <- appInfo %>% 
+    mutate(date=as.Date(str_sub(time,1,10)),hr=as.integer(str_sub(time,12,13)))
+  
+  
+  
+  
+  
+})
+
+output$appChart <- renderPlotly({
+  
+  appData() %>% 
+    group_by(date) %>% 
+    summarize(totTime=sum(hours)) %>% 
+    plot_ly(x=date,y=totTime,markers="lines")
+  
 })
