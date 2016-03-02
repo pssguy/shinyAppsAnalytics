@@ -7,7 +7,8 @@ dashboardPage(
   dashboardSidebar(
    includeCSS("custom.css"),
 inputPanel(
-    textInput("account", "Enter Account Name")
+    textInput("account", "Enter Account Name", value="mytinyshinys"),
+    actionButton("go","Get Data")
     
 ),
     
@@ -55,7 +56,8 @@ inputPanel(
       
 
             
-tabItem("analysis","here we are")
+tabItem("analysis",
+        DT::dataTableOutput("appsTable"))
         
 #tabItem("info",includeMarkdown("about.md"))     
             
