@@ -53,6 +53,9 @@ appData <- eventReactive (input$getChart,{
   
 #  sort(appInfo$time) #146 readings 73x2
   
+  ## allow for zero 
+  
+  
   appInfo <-appInfo %>% 
     arrange(time) %>% 
     filter(hours!=0.00)
@@ -70,9 +73,22 @@ appData <- eventReactive (input$getChart,{
 
 output$appChart <- renderPlotly({
   
+  start <- min(appData()$date) 
+  
+  end <- max(appData()$date)
+  allDates <- data.frame(date=seq(start, end, by = "days"))
+  
+  print(glimpse(appData()))
+  
   appData() %>% 
     group_by(date) %>% 
     summarize(totTime=sum(hours)) %>% 
-    plot_ly(x=date,y=totTime,markers="lines")
+    right_join(allDates) %>% 
+    mutate(hrs=ifelse(is.na(totTime),0,totTime)) %>% 
+    plot_ly(x=date,y=hrs,markers="lines")%>% 
+      layout(hovermode = "closest",
+             xaxis=list(title=" "),
+             yaxis=list(title="Hours per Day")
+      )
   
 })
