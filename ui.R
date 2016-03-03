@@ -6,6 +6,7 @@ dashboardPage(
   
   dashboardSidebar(
    includeCSS("custom.css"),
+   includeMarkdown("about.md"),
 inputPanel(
     textInput("account", "Enter Account Name"),
     actionButton("go","Get Data")
