@@ -7,7 +7,7 @@ dashboardPage(
   dashboardSidebar(
    includeCSS("custom.css"),
 inputPanel(
-    textInput("account", "Enter Account Name", value="mytinyshinys"),
+    textInput("account", "Enter Account Name"),
     actionButton("go","Get Data")
     
 ),

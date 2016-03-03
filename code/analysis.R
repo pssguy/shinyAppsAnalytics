@@ -24,7 +24,8 @@ output$appSelect <- renderUI({
   
   
   inputPanel(
-    selectInput("app", label="Select App",selected="premierLeague", data()$choices),
+    #selectInput("app", label="Select App",selected="premierLeague", data()$choices),
+    selectInput("app", label="Select App", data()$choices),
     actionButton("getChart","Get Chart"))
 })
 
