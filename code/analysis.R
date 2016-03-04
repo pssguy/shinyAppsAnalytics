@@ -11,8 +11,7 @@ data <- eventReactive (input$go,{
   apps$name <- as.character(apps$name)
   apps$status <- as.character(apps$status)
   
-  print(glimpse(apps))
-  
+
   choices <- sort(apps$name)
   
   info=list(apps=apps,choices=choices)
@@ -24,7 +23,7 @@ output$appSelect <- renderUI({
   
   
   inputPanel(
-    #selectInput("app", label="Select App",selected="premierLeague", data()$choices),
+    
     selectInput("app", label="Select App", data()$choices),
     actionButton("getChart","Get Chart"))
 })
@@ -52,11 +51,7 @@ appData <- eventReactive (input$getChart,{
   
   appInfo$time <- as.POSIXct(appInfo$timestamp, origin="1970-01-01")
   
-#  sort(appInfo$time) #146 readings 73x2
-  
-  ## allow for zero 
-  
-  
+
   appInfo <-appInfo %>% 
     arrange(time) %>% 
     filter(hours!=0.00)
@@ -79,7 +74,7 @@ output$appChart <- renderPlotly({
   end <- max(appData()$date)
   allDates <- data.frame(date=seq(start, end, by = "days"))
   
-  print(glimpse(appData()))
+  
   
   appData() %>% 
     group_by(date) %>% 
