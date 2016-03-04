@@ -1,6 +1,7 @@
 
 ## check for packages needed for people running off github
-packages <- c("markdown", "shiny", "shinydashboard", "stringr", "dplyr", "tidyr", "DT", "readr", "plotly")
+packages <- c("markdown", "shiny", "shinydashboard", "stringr", "dplyr", "tidyr", "DT", "readr", "plotly",
+              "digest", "PKI", "RCurl", "RJSONIO", "packrat", "yaml", "rstudioapi")
 if (length(setdiff(packages, rownames(installed.packages()))) > 0) {
   install.packages(setdiff(packages, rownames(installed.packages())))  
 }
